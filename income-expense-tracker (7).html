@@ -325,13 +325,18 @@
     border: 1px solid #e8e8e4;
     border-radius: 12px;
     padding: 14px 16px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
+  }
+  .date-filter-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
   }
   .date-filter-title {
     font-size: 13px;
     font-weight: 500;
-    color: #555;
-    margin-bottom: 10px;
+    color: #1a1a1a;
   }
   .date-filter-row {
     display: grid;
@@ -347,13 +352,15 @@
   }
   .date-filter-row input {
     width: 100%;
-    padding: 7px 8px;
-    border: 1px solid #ddd;
+    padding: 8px 10px;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     font-family: "Noto Sans Lao", sans-serif;
     font-size: 13px;
     -webkit-appearance: none;
     appearance: none;
+    background: #fafaf8;
+    color: #1a1a1a;
   }
   .date-filter-btns {
     display: grid;
@@ -365,28 +372,37 @@
     color: #fff;
     border: none;
     border-radius: 8px;
-    padding: 8px;
+    padding: 9px;
     font-family: "Noto Sans Lao", sans-serif;
     font-size: 13px;
     cursor: pointer;
   }
   .btn-filter-clear {
     background: #f5f5f0;
-    color: #555;
-    border: 1px solid #ddd;
+    color: #888;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 8px;
+    padding: 9px;
     font-family: "Noto Sans Lao", sans-serif;
     font-size: 13px;
     cursor: pointer;
   }
   .filter-badge {
     font-size: 11px;
-    background: #1a1a1a;
+    background: #16a34a;
     color: #fff;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 20px;
-    margin-left: 6px;
+  }
+  .tx-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    background: #fff;
+    border: 1px solid #e8e8e4;
+    border-radius: 12px;
+    padding: 10px 14px;
   }
   .empty {
     text-align: center;
@@ -530,7 +546,10 @@
 
   <div class="controls">
     <div class="date-filter">
-    <div class="date-filter-title">📅 ເລືອກຊ່ວງວັນທີ <span class="filter-badge" id="date-badge" style="display:none">ກຳລັງກອງ</span></div>
+    <div class="date-filter-top">
+      <div class="date-filter-title">📅 ເລືອກຊ່ວງວັນທີ</div>
+      <span class="filter-badge" id="date-badge" style="display:none">ກຳລັງກອງ</span>
+    </div>
     <div class="date-filter-row">
       <div>
         <label>ຈາກວັນທີ</label>
@@ -542,12 +561,13 @@
       </div>
     </div>
     <div class="date-filter-btns">
-      <button class="btn-filter-apply" onclick="applyDateFilter()">ຄົ້ນຫາ</button>
-      <button class="btn-filter-clear" onclick="clearDateFilter()">ລ້າງ</button>
+      <button class="btn-filter-apply" onclick="applyDateFilter()">🔍 ຄົ້ນຫາ</button>
+      <button class="btn-filter-clear" onclick="clearDateFilter()">✕ ລ້າງ</button>
     </div>
   </div>
 
-  <div class="filter-row">
+  <div class="tx-controls">
+    <div class="filter-row">
       <button class="filter-btn active" onclick="setFilter('all',this)">ທັງໝົດ</button>
       <button class="filter-btn" onclick="setFilter('income',this)">ລາຍຮັບ</button>
       <button class="filter-btn" onclick="setFilter('expense',this)">ລາຍຈ່າຍ</button>
