@@ -33,6 +33,38 @@
     font-size: 13px;
     color: #888;
   }
+  .currency-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .currency-label {
+    font-size: 12px;
+    color: #888;
+    flex-shrink: 0;
+  }
+  .currency-btns {
+    display: flex;
+    gap: 6px;
+  }
+  .currency-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-family: "Noto Sans Lao", sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s;
+  }
+  .currency-btn.active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+    font-weight: 500;
+  }
   .summary-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -374,7 +406,39 @@
     display: none;
   }
   @media (max-width: 500px) {
-    .summary-grid { grid-template-columns: 1fr; }
+    .currency-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .currency-label {
+    font-size: 12px;
+    color: #888;
+    flex-shrink: 0;
+  }
+  .currency-btns {
+    display: flex;
+    gap: 6px;
+  }
+  .currency-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-family: "Noto Sans Lao", sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s;
+  }
+  .currency-btn.active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+    font-weight: 500;
+  }
+  .summary-grid { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
     .form-row.three { grid-template-columns: 1fr 1fr; }
     .form-row.three > div:last-child { grid-column: 1 / -1; }
@@ -391,6 +455,15 @@
     <div style="display:flex;align-items:center;gap:10px">
       <span class="saved-badge" id="saved-badge">✓ ບັນທຶກແລ້ວ</span>
       <div class="month-label" id="month-label"></div>
+    </div>
+  </div>
+
+  <div class="currency-selector">
+    <span class="currency-label">ສະກຸນເງິນ:</span>
+    <div class="currency-btns">
+      <button class="currency-btn active" onclick="setCurrency('₭','ກີບ',this)">₭ ກີບ</button>
+      <button class="currency-btn" onclick="setCurrency('฿','ບາດ',this)">฿ ບາດ</button>
+      <button class="currency-btn" onclick="setCurrency('$','ໂດລ່າ',this)">$ ໂດລ່າ</button>
     </div>
   </div>
 
@@ -417,7 +490,7 @@
         <input type="text" id="desc" placeholder="ຊື່ລາຍການ...">
       </div>
       <div>
-        <label>ຈຳນວນເງິນ (฿)</label>
+        <label id="amount-label">ຈຳນວນເງິນ (฿)</label>
         <input type="number" id="amount" placeholder="0" min="0">
       </div>
     </div>
@@ -504,7 +577,7 @@
       <input type="text" id="edit-desc">
     </div>
     <div class="modal-field">
-      <label>ຈຳນວນເງິນ (฿)</label>
+      <label id="amount-label">ຈຳນວນເງິນ (฿)</label>
       <input type="number" id="edit-amount" min="0">
     </div>
     <div class="modal-field">
@@ -555,7 +628,7 @@
   const now = new Date();
   document.getElementById('month-label').textContent = months[now.getMonth()] + ' ' + now.getFullYear();
 
-  function fmt(n) { return '฿' + Math.round(n).toLocaleString(); }
+  function fmt(n) { return currentSymbol + Math.round(n).toLocaleString(); }
 
   function save() {
     localStorage.setItem('lao-budget-txs', JSON.stringify(txs));
@@ -589,6 +662,22 @@
   function setFilter(f, btn) {
     filter = f;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  let currentSymbol = localStorage.getItem('currency-symbol') || '฿';
+
+  // Set active button on load
+  document.querySelectorAll('.currency-btn').forEach(btn => {
+    if (btn.textContent.startsWith(currentSymbol)) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+
+  function setCurrency(symbol, name, btn) {
+    currentSymbol = symbol;
+    localStorage.setItem('currency-symbol', symbol);
+    document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     render();
   }
