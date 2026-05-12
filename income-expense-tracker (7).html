@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ບັນທຶກລາຍຮັບ-ລາຍຈ່າຍ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans Lao', sans-serif;
+    background: #f5f5f0;
+    color: #1a1a1a;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .app {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .app-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .month-label {
+    font-size: 13px;
+    color: #888;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .summary-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #e8e8e4;
+  }
+  .summary-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  .summary-val {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .income-val { color: #16a34a; }
+  .expense-val { color: #dc2626; }
+  .balance-pos { color: #16a34a; }
+  .balance-neg { color: #dc2626; }
+  .form-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e8e8e4;
+  }
+  .form-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 14px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .form-row.three {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  label {
+    font-size: 12px;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+  }
+  input, select {
+  font-size: 16px !important;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Noto Sans Lao', sans-serif;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fafaf8;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus {
+    border-color: #6366f1;
+    background: #fff;
+  }
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .btn-income {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Noto Sans Lao', sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .btn-expense {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Noto Sans Lao', sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .btn-income:hover, .btn-expense:hover { opacity: 0.8; }
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .filter-row { display: flex; gap: 8px; }
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-family: 'Noto Sans Lao', sans-serif;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s;
+  }
+  .filter-btn.active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+    font-weight: 500;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+  }
+  .tx-list { display: flex; flex-direction: column; gap: 8px; }
+  .tx-item {
+    background: #fff;
+    border: 1px solid #e8e8e4;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tx-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .tx-icon.income { background: #dcfce7; }
+  .tx-icon.expense { background: #fee2e2; }
+  .tx-info { flex: 1; min-width: 0; }
+  .tx-name {
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tx-meta {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 3px;
+  }
+  .tx-amount {
+    font-size: 15px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .tx-amount.income { color: #16a34a; }
+  .tx-amount.expense { color: #dc2626; }
+  .tx-edit {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .tx-edit:hover { color: #6366f1; }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+  }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; }
+  .modal-field input, .modal-field select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: "Noto Sans Lao", sans-serif;
+    font-size: 16px;
+    color: #1a1a1a;
+    background: #fafaf8;
+  }
+  .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .modal-cancel {
+    background: #f5f5f0;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: "Noto Sans Lao", sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .modal-save {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: "Noto Sans Lao", sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .tx-del {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .tx-del:hover { color: #dc2626; }
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #bbb;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e8e8e4;
+  }
+  .saved-badge {
+    font-size: 11px;
+    color: #16a34a;
+    background: #dcfce7;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: none;
+  }
+  @media (max-width: 500px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-row.three { grid-template-columns: 1fr 1fr; }
+    .form-row.three > div:last-child { grid-column: 1 / -1; }
+    .summary-val { font-size: 18px; }
+    body { padding: 12px; }
+    input[type="date"] { font-size: 14px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="app-title">ບັນທຶກລາຍຮັບ-ລາຍຈ່າຍ</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="saved-badge" id="saved-badge">✓ ບັນທຶກແລ້ວ</span>
+      <div class="month-label" id="month-label"></div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-label">ລາຍຮັບທັງໝົດ</div>
+      <div class="summary-val income-val" id="total-income">฿0</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">ລາຍຈ່າຍທັງໝົດ</div>
+      <div class="summary-val expense-val" id="total-expense">฿0</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">ຍອດຄົງເຫຼືອ</div>
+      <div class="summary-val" id="balance">฿0</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-title">ເພີ່ມລາຍການໃໝ່</div>
+    <div class="form-row">
+      <div>
+        <label>ລາຍລະອຽດ</label>
+        <input type="text" id="desc" placeholder="ຊື່ລາຍການ...">
+      </div>
+      <div>
+        <label>ຈຳນວນເງິນ (฿)</label>
+        <input type="number" id="amount" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div>
+        <label>ໝວດໝູ່</label>
+        <select id="category">
+          <option value="ເງິນເດືອນ">ເງິນເດືອນ</option>
+          <option value="ທຸລະກິດ">ທຸລະກິດ</option>
+          <option value="ບັດດອງ">ບັດດອງ</option>
+          <option value="ອາຫານ">ອາຫານ</option>
+          <option value="ເຄື່ອງດື່ມ">ເຄື່ອງດື່ມ</option>
+          <option value="ການຂົນສົ່ງ">ການຂົນສົ່ງ</option>
+          <option value="ສຸຂະພາບ">ສຸຂະພາບ</option>
+          <option value="ການສຶກສາ">ການສຶກສາ</option>
+          <option value="ຄ່ານ້ຳ-ໄຟ">ຄ່ານ້ຳ-ໄຟ</option>
+          <option value="ບັນເທີງ">ບັນເທີງ</option>
+          <option value="ເສື້ອຜ້າ">ເສື້ອຜ້າ</option>
+          <option value="ເຄື່ອງໃຊ້">ເຄື່ອງໃຊ້</option>
+          <option value="ອື່ນໆ">ອື່ນໆ</option>
+        </select>
+      </div>
+      <div>
+        <label>ວັນທີ</label>
+        <input type="date" id="date" style="width:100%;min-width:0;-webkit-appearance:none;appearance:none;padding:8px 6px;font-size:13px">
+      </div>
+    </div>
+    <div style="margin-bottom:10px">
+      <label>ໝາຍເຫດ</label>
+      <input type="text" id="note" placeholder="(ທາງເລືອກ)" style="width:100%">
+    </div>
+    <div class="btn-row">
+      <button class="btn-income" onclick="addTransaction('income')">+ ລາຍຮັບ</button>
+      <button class="btn-expense" onclick="addTransaction('expense')">− ລາຍຈ່າຍ</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFilter('all',this)">ທັງໝົດ</button>
+      <button class="filter-btn" onclick="setFilter('income',this)">ລາຍຮັບ</button>
+      <button class="filter-btn" onclick="setFilter('expense',this)">ລາຍຈ່າຍ</button>
+    </div>
+    <div class="section-title">ລາຍການທຸລະກຳ</div>
+  </div>
+
+  <div class="tx-list" id="tx-list">
+    <div class="empty">ຍັງບໍ່ມີລາຍການ — ເພີ່ມລາຍຮັບຫຼືລາຍຈ່າຍໄດ້ເລີຍ</div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">✏️ ແກ້ໄຂລາຍການ</div>
+    <input type="hidden" id="edit-id">
+    <div class="modal-field">
+      <label>ປະເພດ</label>
+      <select id="edit-type">
+        <option value="income">ລາຍຮັບ</option>
+        <option value="expense">ລາຍຈ່າຍ</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>ລາຍລະອຽດ</label>
+      <input type="text" id="edit-desc">
+    </div>
+    <div class="modal-field">
+      <label>ຈຳນວນເງິນ (฿)</label>
+      <input type="number" id="edit-amount" min="0">
+    </div>
+    <div class="modal-field">
+      <label>ໝວດໝູ່</label>
+      <select id="edit-category">
+        <option value="ເງິນເດືອນ">ເງິນເດືອນ</option>
+        <option value="ທຸລະກິດ">ທຸລະກິດ</option>
+        <option value="ບັດດອງ">ບັດດອງ</option>
+        <option value="ອາຫານ">ອາຫານ</option>
+          <option value="ເຄື່ອງດື່ມ">ເຄື່ອງດື່ມ</option>
+        <option value="ການຂົນສົ່ງ">ການຂົນສົ່ງ</option>
+        <option value="ສຸຂະພາບ">ສຸຂະພາບ</option>
+        <option value="ການສຶກສາ">ການສຶກສາ</option>
+        <option value="ຄ່ານ້ຳ-ໄຟ">ຄ່ານ້ຳ-ໄຟ</option>
+        <option value="ບັນເທີງ">ບັນເທີງ</option>
+        <option value="ເສື້ອຜ້າ">ເສື້ອຜ້າ</option>
+          <option value="ເຄື່ອງໃຊ້">ເຄື່ອງໃຊ້</option>
+          <option value="ອື່ນໆ">ອື່ນໆ</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>ວັນທີ</label>
+      <input type="date" id="edit-date" style="width:100%;min-width:0;-webkit-appearance:none;appearance:none;font-size:14px;padding:8px 6px">
+    </div>
+    <div class="modal-field">
+      <label>ໝາຍເຫດ</label>
+      <input type="text" id="edit-note" placeholder="(ທາງເລືອກ)">
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">ຍົກເລີກ</button>
+      <button class="modal-save" onclick="saveEdit()">ບັນທຶກ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const catIcons = {
+    'ເງິນເດືອນ':'💼','ທຸລະກິດ':'📊','ບັດດອງ':'🎴','ອາຫານ':'🍜','ເຄື່ອງດື່ມ':'🥤',
+    'ການຂົນສົ່ງ':'🚗','ສຸຂະພາບ':'❤️','ການສຶກສາ':'📚',
+    'ຄ່ານ້ຳ-ໄຟ':'💡','ບັນເທີງ':'🎮','ເສື້ອຜ້າ':'👕','ເຄື່ອງໃຊ້':'🧴','ອື່ນໆ':'📌'
+  };
+  const months = ['ມັງກອນ','ກຸມພາ','ມີນາ','ເມສາ','ພຶດສະພາ','ມິຖຸນາ','ກໍລະກົດ','ສິງຫາ','ກັນຍາ','ຕຸລາ','ພະຈິກ','ທັນວາ'];
+
+  let txs = JSON.parse(localStorage.getItem('lao-budget-txs') || '[]');
+  let filter = 'all';
+
+  document.getElementById('date').valueAsDate = new Date();
+  const now = new Date();
+  document.getElementById('month-label').textContent = months[now.getMonth()] + ' ' + now.getFullYear();
+
+  function fmt(n) { return '฿' + Math.round(n).toLocaleString(); }
+
+  function save() {
+    localStorage.setItem('lao-budget-txs', JSON.stringify(txs));
+    const badge = document.getElementById('saved-badge');
+    badge.style.display = 'inline';
+    setTimeout(() => badge.style.display = 'none', 2000);
+  }
+
+  function addTransaction(type) {
+    const desc = document.getElementById('desc').value.trim();
+    const amount = parseFloat(document.getElementById('amount').value);
+    const category = document.getElementById('category').value;
+    const date = document.getElementById('date').value;
+    const note = document.getElementById('note').value.trim();
+    if (!desc) { document.getElementById('desc').focus(); return; }
+    if (!amount || amount <= 0) { document.getElementById('amount').focus(); return; }
+    txs.unshift({ id: Date.now(), type, desc, amount, category, date, note });
+    document.getElementById('desc').value = '';
+    document.getElementById('amount').value = '';
+    document.getElementById('note').value = '';
+    save();
+    render();
+  }
+
+  function deleteTransaction(id) {
+    txs = txs.filter(t => t.id !== id);
+    save();
+    render();
+  }
+
+  function setFilter(f, btn) {
+    filter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  function editTransaction(id) {
+    const t = txs.find(x => x.id === id);
+    if (!t) return;
+    document.getElementById('edit-id').value = id;
+    document.getElementById('edit-type').value = t.type;
+    document.getElementById('edit-desc').value = t.desc;
+    document.getElementById('edit-amount').value = t.amount;
+    document.getElementById('edit-category').value = t.category;
+    document.getElementById('edit-date').value = t.date;
+    document.getElementById('edit-note').value = t.note || '';
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function saveEdit() {
+    const id = parseInt(document.getElementById('edit-id').value);
+    const desc = document.getElementById('edit-desc').value.trim();
+    const amount = parseFloat(document.getElementById('edit-amount').value);
+    if (!desc || !amount || amount <= 0) return;
+    const idx = txs.findIndex(x => x.id === id);
+    if (idx === -1) return;
+    txs[idx] = {
+      id,
+      type: document.getElementById('edit-type').value,
+      desc,
+      amount,
+      category: document.getElementById('edit-category').value,
+      date: document.getElementById('edit-date').value,
+      note: document.getElementById('edit-note').value.trim()
+    };
+    save();
+    closeModal();
+    render();
+  }
+
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  function render() {
+    const income = txs.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+    const expense = txs.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    const balance = income - expense;
+
+    document.getElementById('total-income').textContent = fmt(income);
+    document.getElementById('total-expense').textContent = fmt(expense);
+    const balEl = document.getElementById('balance');
+    balEl.textContent = fmt(Math.abs(balance));
+    balEl.className = 'summary-val ' + (balance >= 0 ? 'balance-pos' : 'balance-neg');
+
+    const filtered = filter === 'all' ? txs : txs.filter(t => t.type === filter);
+    const list = document.getElementById('tx-list');
+
+    if (!filtered.length) {
+      list.innerHTML = '<div class="empty">ບໍ່ມີລາຍການທີ່ຕົງກັນ</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(t => {
+      const icon = catIcons[t.category] || '📌';
+      const d = t.date ? new Date(t.date + 'T00:00:00').toLocaleDateString('lo-LA') : '';
+      return `<div class="tx-item">
+        <div class="tx-icon ${t.type}">${icon}</div>
+        <div class="tx-info">
+          <div class="tx-name">${t.desc}</div>
+          <div class="tx-meta">${t.category}${t.note ? ' · ' + t.note : ''}${d ? ' · ' + d : ''}</div>
+        </div>
+        <div class="tx-amount ${t.type}">${t.type === 'income' ? '+' : '−'}${fmt(t.amount)}</div>
+        <button class="tx-edit" onclick="editTransaction(${t.id})">✏️</button><button class="tx-del" onclick="deleteTransaction(${t.id})">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  render();
+</script>
+</body>
+</html>
