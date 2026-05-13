@@ -2,487 +2,308 @@
 <html lang="lo">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ບັນທຶກລາຍຮັບ-ລາຍຈ່າຍ</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Noto Sans Lao', sans-serif;
-    background: #f5f5f0;
-    color: #1a1a1a;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  .app {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .app-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: #1a1a1a;
-  }
-  .month-label {
-    font-size: 13px;
-    color: #888;
-  }
-  .currency-selector {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-  .currency-label {
-    font-size: 12px;
-    color: #888;
-    flex-shrink: 0;
-  }
-  .currency-btns {
-    display: flex;
-    gap: 6px;
-  }
-  .currency-btn {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    color: #555;
-    transition: all 0.2s;
-  }
-  .currency-btn.active {
-    background: #1a1a1a;
-    color: #fff;
-    border-color: #1a1a1a;
-    font-weight: 500;
-  }
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .summary-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    border: 1px solid #e8e8e4;
-  }
-  .summary-label {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 8px;
-  }
-  .summary-val {
-    font-size: 20px;
-    font-weight: 600;
-  }
-  .income-val { color: #16a34a; }
-  .expense-val { color: #dc2626; }
-  .balance-pos { color: #16a34a; }
-  .balance-neg { color: #dc2626; }
-  .form-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #e8e8e4;
-  }
-  .form-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: #555;
-    margin-bottom: 14px;
-  }
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .form-row.three {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  label {
-    font-size: 12px;
-    color: #666;
-    display: block;
-    margin-bottom: 5px;
-  }
-  input, select {
-  font-size: 16px !important;
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Noto Sans Lao', sans-serif;
-    font-size: 13px;
-    color: #1a1a1a;
-    background: #fafaf8;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input:focus, select:focus {
-    border-color: #6366f1;
-    background: #fff;
-  }
-  .btn-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 12px;
-  }
-  .btn-income {
-    background: #dcfce7;
-    color: #16a34a;
-    border: 1px solid #bbf7d0;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 14px;
-    font-family: 'Noto Sans Lao', sans-serif;
-    cursor: pointer;
-    font-weight: 500;
-    transition: opacity 0.2s;
-  }
-  .btn-expense {
-    background: #fee2e2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 14px;
-    font-family: 'Noto Sans Lao', sans-serif;
-    cursor: pointer;
-    font-weight: 500;
-    transition: opacity 0.2s;
-  }
-  .btn-income:hover, .btn-expense:hover { opacity: 0.8; }
-  .controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .filter-row { display: flex; gap: 8px; }
-  .filter-btn {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-family: 'Noto Sans Lao', sans-serif;
-    cursor: pointer;
-    color: #555;
-    transition: all 0.2s;
-  }
-  .filter-btn.active {
-    background: #1a1a1a;
-    color: #fff;
-    border-color: #1a1a1a;
-    font-weight: 500;
-  }
-  .section-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: #888;
-  }
-  .tx-list { display: flex; flex-direction: column; gap: 8px; }
-  .tx-item {
-    background: #fff;
-    border: 1px solid #e8e8e4;
-    border-radius: 10px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .tx-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .tx-icon.income { background: #dcfce7; }
-  .tx-icon.expense { background: #fee2e2; }
-  .tx-info { flex: 1; min-width: 0; }
-  .tx-name {
-    font-size: 14px;
-    color: #1a1a1a;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .tx-meta {
-    font-size: 11px;
-    color: #aaa;
-    margin-top: 3px;
-  }
-  .tx-amount {
-    font-size: 15px;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-  .tx-amount.income { color: #16a34a; }
-  .tx-amount.expense { color: #dc2626; }
-  .tx-edit {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #aaa;
-    font-size: 14px;
-    padding: 4px 6px;
-    border-radius: 6px;
-    flex-shrink: 0;
-    transition: color 0.2s;
-  }
-  .tx-edit:hover { color: #6366f1; }
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: #fff;
-    border-radius: 16px;
-    padding: 24px 20px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  }
-  .modal-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 16px;
-  }
-  .modal-field { margin-bottom: 12px; }
-  .modal-field label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; }
-  .modal-field input, .modal-field select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 16px;
-    color: #1a1a1a;
-    background: #fafaf8;
-  }
-  .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
-  .modal-cancel {
-    background: #f5f5f0;
-    color: #555;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .modal-save {
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .tx-del {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ccc;
-    font-size: 14px;
-    padding: 4px 6px;
-    border-radius: 6px;
-    flex-shrink: 0;
-    transition: color 0.2s;
-  }
-  .tx-del:hover { color: #dc2626; }
-  .date-filter {
-    background: #fff;
-    border: 1px solid #e8e8e4;
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-  }
-  .date-filter-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  .date-filter-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: #1a1a1a;
-  }
-  .date-filter-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .date-filter-row label {
-    font-size: 11px;
-    color: #888;
-    display: block;
-    margin-bottom: 4px;
-  }
-  .date-filter-row input {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 13px;
-    -webkit-appearance: none;
-    appearance: none;
-    background: #fafaf8;
-    color: #1a1a1a;
-  }
-  .date-filter-btns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .btn-filter-apply {
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 9px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .btn-filter-clear {
-    background: #f5f5f0;
-    color: #888;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 9px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .filter-badge {
-    font-size: 11px;
-    background: #16a34a;
-    color: #fff;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-  .tx-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    background: #fff;
-    border: 1px solid #e8e8e4;
-    border-radius: 12px;
-    padding: 10px 14px;
-  }
-  .empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: #bbb;
-    font-size: 14px;
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid #e8e8e4;
-  }
-  .saved-badge {
-    font-size: 11px;
-    color: #16a34a;
-    background: #dcfce7;
-    padding: 3px 10px;
-    border-radius: 20px;
-    display: none;
-  }
-  @media (max-width: 500px) {
-    .currency-selector {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-  .currency-label {
-    font-size: 12px;
-    color: #888;
-    flex-shrink: 0;
-  }
-  .currency-btns {
-    display: flex;
-    gap: 6px;
-  }
-  .currency-btn {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-family: "Noto Sans Lao", sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    color: #555;
-    transition: all 0.2s;
-  }
-  .currency-btn.active {
-    background: #1a1a1a;
-    color: #fff;
-    border-color: #1a1a1a;
-    font-weight: 500;
-  }
-  .summary-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .form-row.three { grid-template-columns: 1fr 1fr; }
-    .form-row.three > div:last-child { grid-column: 1 / -1; }
-    .summary-val { font-size: 18px; }
-    body { padding: 12px; }
-    input[type="date"] { font-size: 14px !important; }
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans Lao', sans-serif;
+  background: #f0f0ea;
+  color: #1a1a1a;
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+
+/* ===== TOP HEADER ===== */
+.top-bar {
+  background: #fff;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #e8e8e4;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.top-bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.app-title { font-size: 18px; font-weight: 600; color: #1a1a1a; }
+.month-label { font-size: 12px; color: #aaa; }
+.currency-btns { display: flex; gap: 6px; }
+.currency-btn {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: 'Noto Sans Lao', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  color: #666;
+  background: #f5f5f0;
+}
+.currency-btn.active {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* ===== SUMMARY CARDS ===== */
+.summary-wrap { padding: 14px 12px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.summary-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid #e8e8e4;
+}
+.summary-label { font-size: 10px; color: #aaa; margin-bottom: 6px; }
+.summary-val { font-size: 16px; font-weight: 600; }
+.income-val { color: #16a34a; }
+.expense-val { color: #dc2626; }
+.balance-pos { color: #16a34a; }
+.balance-neg { color: #dc2626; }
+
+/* ===== ADD FORM ===== */
+.form-wrap { padding: 12px 12px 0; }
+.form-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e8e8e4;
+  overflow: hidden;
+}
+.form-header {
+  padding: 12px 14px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+}
+.form-body { padding: 10px 14px 14px; }
+.field { margin-bottom: 10px; }
+.field label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
+.field input, .field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e8e8e4;
+  border-radius: 10px;
+  font-family: 'Noto Sans Lao', sans-serif;
+  font-size: 16px;
+  color: #1a1a1a;
+  background: #fafaf8;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field input:focus, .field select:focus {
+  border-color: #1a1a1a;
+  outline: none;
+  background: #fff;
+}
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+.btn-income {
+  background: #dcfce7; color: #16a34a;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px; padding: 12px;
+  font-size: 15px; font-family: 'Noto Sans Lao', sans-serif;
+  cursor: pointer; font-weight: 500;
+}
+.btn-expense {
+  background: #fee2e2; color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 10px; padding: 12px;
+  font-size: 15px; font-family: 'Noto Sans Lao', sans-serif;
+  cursor: pointer; font-weight: 500;
+}
+
+/* ===== DATE FILTER ===== */
+.filter-wrap { padding: 12px 12px 0; }
+.filter-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e8e8e4;
+  overflow: hidden;
+}
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.filter-header-left { display: flex; align-items: center; gap: 8px; }
+.filter-header-title { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+.filter-badge {
+  font-size: 10px;
+  background: #16a34a;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.filter-arrow { font-size: 12px; color: #aaa; transition: transform 0.2s; }
+.filter-arrow.open { transform: rotate(180deg); }
+.filter-body { padding: 0 14px 14px; display: none; }
+.filter-body.open { display: block; }
+.filter-date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.filter-date-row label { font-size: 11px; color: #aaa; display: block; margin-bottom: 4px; }
+.filter-date-row input {
+  width: 100%; padding: 9px 10px;
+  border: 1px solid #e8e8e4;
+  border-radius: 10px;
+  font-family: 'Noto Sans Lao', sans-serif;
+  font-size: 14px;
+  background: #fafaf8;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.filter-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.btn-search {
+  background: #1a1a1a; color: #fff; border: none;
+  border-radius: 10px; padding: 10px;
+  font-family: 'Noto Sans Lao', sans-serif; font-size: 13px; cursor: pointer;
+}
+.btn-clear-filter {
+  background: #f5f5f0; color: #888;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px; padding: 10px;
+  font-family: 'Noto Sans Lao', sans-serif; font-size: 13px; cursor: pointer;
+}
+
+/* ===== TX LIST ===== */
+.tx-wrap { padding: 12px 12px 0; }
+.tx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.tx-title { font-size: 13px; font-weight: 500; color: #888; }
+.type-pills { display: flex; gap: 6px; }
+.type-pill {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: 'Noto Sans Lao', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  color: #888;
+  background: #fff;
+}
+.type-pill.active {
+  background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-weight: 500;
+}
+.tx-list { display: flex; flex-direction: column; gap: 8px; }
+.tx-item {
+  background: #fff;
+  border: 1px solid #e8e8e4;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tx-icon {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.tx-icon.income { background: #dcfce7; }
+.tx-icon.expense { background: #fee2e2; }
+.tx-info { flex: 1; min-width: 0; }
+.tx-name { font-size: 14px; font-weight: 500; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tx-meta { font-size: 11px; color: #bbb; margin-top: 2px; }
+.tx-amount { font-size: 15px; font-weight: 600; flex-shrink: 0; }
+.tx-amount.income { color: #16a34a; }
+.tx-amount.expense { color: #dc2626; }
+.tx-actions { display: flex; gap: 2px; flex-shrink: 0; }
+.tx-edit, .tx-del {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; padding: 5px 6px; border-radius: 8px; color: #ccc;
+}
+.tx-edit:hover { color: #6366f1; }
+.tx-del:hover { color: #dc2626; }
+.empty {
+  text-align: center; padding: 40px 20px;
+  color: #ccc; font-size: 13px;
+  background: #fff; border-radius: 14px;
+  border: 1px solid #e8e8e4;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none; position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 100; align-items: flex-end; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px 36px;
+  width: 100%; max-width: 480px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-handle {
+  width: 36px; height: 4px;
+  background: #e0e0e0; border-radius: 2px;
+  margin: 0 auto 16px;
+}
+.modal-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #1a1a1a; }
+.modal-field { margin-bottom: 12px; }
+.modal-field label { font-size: 12px; color: #888; display: block; margin-bottom: 5px; }
+.modal-field input, .modal-field select {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid #e8e8e4; border-radius: 10px;
+  font-family: 'Noto Sans Lao', sans-serif; font-size: 16px;
+  background: #fafaf8; color: #1a1a1a;
+  -webkit-appearance: none; appearance: none;
+}
+.modal-field input:focus, .modal-field select:focus {
+  border-color: #1a1a1a; outline: none; background: #fff;
+}
+.modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.modal-cancel {
+  background: #f5f5f0; color: #555;
+  border: 1px solid #ddd; border-radius: 10px; padding: 12px;
+  font-family: 'Noto Sans Lao', sans-serif; font-size: 14px; cursor: pointer;
+}
+.modal-save {
+  background: #1a1a1a; color: #fff; border: none;
+  border-radius: 10px; padding: 12px;
+  font-family: 'Noto Sans Lao', sans-serif; font-size: 14px; cursor: pointer;
+}
+.saved-badge {
+  font-size: 11px; color: #16a34a;
+  background: #dcfce7; padding: 3px 10px;
+  border-radius: 20px; display: none;
+}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-row">
     <div class="app-title">ບັນທຶກລາຍຮັບ-ລາຍຈ່າຍ</div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span class="saved-badge" id="saved-badge">✓ ບັນທຶກແລ້ວ</span>
-      <div class="month-label" id="month-label"></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="saved-badge" id="saved-badge">✓ ບັນທຶກ</span>
+      <span class="month-label" id="month-label"></span>
     </div>
   </div>
-
-  <div class="currency-selector">
-    <span class="currency-label">ສະກຸນເງິນ:</span>
-    <div class="currency-btns">
-      <button class="currency-btn active" onclick="setCurrency('₭','ກີບ',this)">₭ ກີບ</button>
-      <button class="currency-btn" onclick="setCurrency('฿','ບາດ',this)">฿ ບາດ</button>
-      <button class="currency-btn" onclick="setCurrency('$','ໂດລ່າ',this)">$ ໂດລ່າ</button>
-    </div>
+  <div class="currency-btns">
+    <button class="currency-btn" onclick="setCurrency('₭','ກີບ',this)">₭ ກີບ</button>
+    <button class="currency-btn" onclick="setCurrency('฿','ບາດ',this)">฿ ບາດ</button>
+    <button class="currency-btn" onclick="setCurrency('$','ໂດລ່າ',this)">$ ໂດລ່າ</button>
   </div>
+</div>
 
+<!-- SUMMARY -->
+<div class="summary-wrap">
   <div class="summary-grid">
     <div class="summary-card">
       <div class="summary-label">ລາຍຮັບທັງໝົດ</div>
@@ -497,92 +318,108 @@
       <div class="summary-val" id="balance">฿0</div>
     </div>
   </div>
+</div>
 
+<!-- ADD FORM -->
+<div class="form-wrap">
   <div class="form-card">
-    <div class="form-title">ເພີ່ມລາຍການໃໝ່</div>
-    <div class="form-row">
-      <div>
+    <div class="form-header">ເພີ່ມລາຍການໃໝ່</div>
+    <div class="form-body">
+      <div class="field">
         <label>ລາຍລະອຽດ</label>
         <input type="text" id="desc" placeholder="ຊື່ລາຍການ...">
       </div>
-      <div>
-        <label id="amount-label">ຈຳນວນເງິນ (฿)</label>
-        <input type="number" id="amount" placeholder="0" min="0">
+      <div class="field-row">
+        <div class="field" style="margin:0">
+          <label id="amount-label">ຈຳນວນເງິນ (฿)</label>
+          <input type="number" id="amount" placeholder="0" min="0">
+        </div>
+        <div class="field" style="margin:0">
+          <label>ໝວດໝູ່</label>
+          <select id="category">
+            <option value="ເງິນເດືອນ">ເງິນເດືອນ</option>
+            <option value="ທຸລະກິດ">ທຸລະກິດ</option>
+            <option value="ບັດດອງ">ບັດດອງ</option>
+            <option value="ອາຫານ">ອາຫານ</option>
+            <option value="ເຄື່ອງດື່ມ">ເຄື່ອງດື່ມ</option>
+            <option value="ການຂົນສົ່ງ">ການຂົນສົ່ງ</option>
+            <option value="ສຸຂະພາບ">ສຸຂະພາບ</option>
+            <option value="ການສຶກສາ">ການສຶກສາ</option>
+            <option value="ຄ່ານ້ຳ-ໄຟ">ຄ່ານ້ຳ-ໄຟ</option>
+            <option value="ບັນເທີງ">ບັນເທີງ</option>
+            <option value="ເສື້ອຜ້າ">ເສື້ອຜ້າ</option>
+            <option value="ເຄື່ອງໃຊ້">ເຄື່ອງໃຊ້</option>
+            <option value="ອື່ນໆ">ອື່ນໆ</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field" style="margin:0">
+          <label>ວັນທີ</label>
+          <input type="date" id="date" style="width:100%;min-width:0">
+        </div>
+        <div class="field" style="margin:0">
+          <label>ໝາຍເຫດ</label>
+          <input type="text" id="note" placeholder="(ທາງເລືອກ)">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-income" onclick="addTransaction('income')">+ ລາຍຮັບ</button>
+        <button class="btn-expense" onclick="addTransaction('expense')">− ລາຍຈ່າຍ</button>
       </div>
     </div>
-    <div class="form-row">
-      <div>
-        <label>ໝວດໝູ່</label>
-        <select id="category">
-          <option value="ເງິນເດືອນ">ເງິນເດືອນ</option>
-          <option value="ທຸລະກິດ">ທຸລະກິດ</option>
-          <option value="ບັດດອງ">ບັດດອງ</option>
-          <option value="ອາຫານ">ອາຫານ</option>
-          <option value="ເຄື່ອງດື່ມ">ເຄື່ອງດື່ມ</option>
-          <option value="ການຂົນສົ່ງ">ການຂົນສົ່ງ</option>
-          <option value="ສຸຂະພາບ">ສຸຂະພາບ</option>
-          <option value="ການສຶກສາ">ການສຶກສາ</option>
-          <option value="ຄ່ານ້ຳ-ໄຟ">ຄ່ານ້ຳ-ໄຟ</option>
-          <option value="ບັນເທີງ">ບັນເທີງ</option>
-          <option value="ເສື້ອຜ້າ">ເສື້ອຜ້າ</option>
-          <option value="ເຄື່ອງໃຊ້">ເຄື່ອງໃຊ້</option>
-          <option value="ອື່ນໆ">ອື່ນໆ</option>
-        </select>
-      </div>
-      <div>
-        <label>ວັນທີ</label>
-        <input type="date" id="date" style="width:100%;min-width:0;-webkit-appearance:none;appearance:none;padding:8px 6px;font-size:13px">
-      </div>
-    </div>
-    <div style="margin-bottom:10px">
-      <label>ໝາຍເຫດ</label>
-      <input type="text" id="note" placeholder="(ທາງເລືອກ)" style="width:100%">
-    </div>
-    <div class="btn-row">
-      <button class="btn-income" onclick="addTransaction('income')">+ ລາຍຮັບ</button>
-      <button class="btn-expense" onclick="addTransaction('expense')">− ລາຍຈ່າຍ</button>
-    </div>
-  </div>
-
-  <div class="controls">
-    <div class="date-filter">
-    <div class="date-filter-top">
-      <div class="date-filter-title">📅 ເລືອກຊ່ວງວັນທີ</div>
-      <span class="filter-badge" id="date-badge" style="display:none">ກຳລັງກອງ</span>
-    </div>
-    <div class="date-filter-row">
-      <div>
-        <label>ຈາກວັນທີ</label>
-        <input type="date" id="filter-from">
-      </div>
-      <div>
-        <label>ຫາວັນທີ</label>
-        <input type="date" id="filter-to">
-      </div>
-    </div>
-    <div class="date-filter-btns">
-      <button class="btn-filter-apply" onclick="applyDateFilter()">🔍 ຄົ້ນຫາ</button>
-      <button class="btn-filter-clear" onclick="clearDateFilter()">✕ ລ້າງ</button>
-    </div>
-  </div>
-
-  <div class="tx-controls">
-    <div class="filter-row">
-      <button class="filter-btn active" onclick="setFilter('all',this)">ທັງໝົດ</button>
-      <button class="filter-btn" onclick="setFilter('income',this)">ລາຍຮັບ</button>
-      <button class="filter-btn" onclick="setFilter('expense',this)">ລາຍຈ່າຍ</button>
-    </div>
-    <div class="section-title">ລາຍການທຸລະກຳ</div>
-  </div>
-
-  <div class="tx-list" id="tx-list">
-    <div class="empty">ຍັງບໍ່ມີລາຍການ — ເພີ່ມລາຍຮັບຫຼືລາຍຈ່າຍໄດ້ເລີຍ</div>
   </div>
 </div>
 
-<!-- Edit Modal -->
+<!-- DATE FILTER (collapsible) -->
+<div class="filter-wrap">
+  <div class="filter-card">
+    <div class="filter-header" onclick="toggleFilter()">
+      <div class="filter-header-left">
+        <span>📅</span>
+        <span class="filter-header-title">ເລືອກຊ່ວງວັນທີ</span>
+        <span class="filter-badge" id="date-badge" style="display:none">ກຳລັງກອງ</span>
+      </div>
+      <span class="filter-arrow" id="filter-arrow">▼</span>
+    </div>
+    <div class="filter-body" id="filter-body">
+      <div class="filter-date-row">
+        <div>
+          <label>ຈາກວັນທີ</label>
+          <input type="date" id="filter-from">
+        </div>
+        <div>
+          <label>ຫາວັນທີ</label>
+          <input type="date" id="filter-to">
+        </div>
+      </div>
+      <div class="filter-action-row">
+        <button class="btn-search" onclick="applyDateFilter()">🔍 ຄົ້ນຫາ</button>
+        <button class="btn-clear-filter" onclick="clearDateFilter()">✕ ລ້າງ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TX LIST -->
+<div class="tx-wrap">
+  <div class="tx-header">
+    <div class="tx-title">ລາຍການທຸລະກຳ</div>
+    <div class="type-pills">
+      <button class="type-pill active" onclick="setFilter('all',this)">ທັງໝົດ</button>
+      <button class="type-pill" onclick="setFilter('income',this)">ລາຍຮັບ</button>
+      <button class="type-pill" onclick="setFilter('expense',this)">ລາຍຈ່າຍ</button>
+    </div>
+  </div>
+  <div class="tx-list" id="tx-list">
+    <div class="empty">ຍັງບໍ່ມີລາຍການ</div>
+  </div>
+</div>
+
+<!-- EDIT MODAL (slides up from bottom) -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title">✏️ ແກ້ໄຂລາຍການ</div>
     <input type="hidden" id="edit-id">
     <div class="modal-field">
@@ -597,7 +434,7 @@
       <input type="text" id="edit-desc">
     </div>
     <div class="modal-field">
-      <label id="amount-label">ຈຳນວນເງິນ (฿)</label>
+      <label>ຈຳນວນເງິນ</label>
       <input type="number" id="edit-amount" min="0">
     </div>
     <div class="modal-field">
@@ -607,20 +444,20 @@
         <option value="ທຸລະກິດ">ທຸລະກິດ</option>
         <option value="ບັດດອງ">ບັດດອງ</option>
         <option value="ອາຫານ">ອາຫານ</option>
-          <option value="ເຄື່ອງດື່ມ">ເຄື່ອງດື່ມ</option>
+        <option value="ເຄື່ອງດື່ມ">ເຄື່ອງດື່ມ</option>
         <option value="ການຂົນສົ່ງ">ການຂົນສົ່ງ</option>
         <option value="ສຸຂະພາບ">ສຸຂະພາບ</option>
         <option value="ການສຶກສາ">ການສຶກສາ</option>
         <option value="ຄ່ານ້ຳ-ໄຟ">ຄ່ານ້ຳ-ໄຟ</option>
         <option value="ບັນເທີງ">ບັນເທີງ</option>
         <option value="ເສື້ອຜ້າ">ເສື້ອຜ້າ</option>
-          <option value="ເຄື່ອງໃຊ້">ເຄື່ອງໃຊ້</option>
-          <option value="ອື່ນໆ">ອື່ນໆ</option>
+        <option value="ເຄື່ອງໃຊ້">ເຄື່ອງໃຊ້</option>
+        <option value="ອື່ນໆ">ອື່ນໆ</option>
       </select>
     </div>
     <div class="modal-field">
       <label>ວັນທີ</label>
-      <input type="date" id="edit-date" style="width:100%;min-width:0;-webkit-appearance:none;appearance:none;font-size:14px;padding:8px 6px">
+      <input type="date" id="edit-date" style="width:100%;min-width:0">
     </div>
     <div class="modal-field">
       <label>ໝາຍເຫດ</label>
@@ -681,7 +518,7 @@
 
   function setFilter(f, btn) {
     filter = f;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.type-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     render();
   }
@@ -690,7 +527,7 @@
 
   // Set active button on load
   document.querySelectorAll('.currency-btn').forEach(btn => {
-    if (btn.textContent.startsWith(currentSymbol)) btn.classList.add('active');
+    if (btn.textContent.trim().startsWith(currentSymbol)) btn.classList.add('active');
     else btn.classList.remove('active');
   });
 
@@ -805,6 +642,13 @@
   }
 
   render();
+
+  function toggleFilter() {
+    const body = document.getElementById('filter-body');
+    const arrow = document.getElementById('filter-arrow');
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
 </script>
 </body>
 </html>
